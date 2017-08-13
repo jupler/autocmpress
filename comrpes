@@ -1,0 +1,59 @@
+
+
+<?php
+
+
+
+
+if($_REQUEST['a'] == 'add') 
+
+
+{
+       $uploadDir = 'gambar-item/';
+
+
+$fileName = $_FILES['gambar_jual']['name'];
+$tmpName  = $_FILES['gambar_jual']['tmp_name'];
+$fileSize = $_FILES['gambar_jual']['size'];
+$fileType = $_FILES['gambar_jual']['type'];
+
+$filePath = $uploadDir . $fileName;
+
+$result = move_uploaded_file($tmpName, $filePath);
+if (!$result) {
+echo "<div style='margin-top:7px;color:#111;'>Ada kesalahan dalam mengupload barang, Ceck input dengan benar <strong>ERROR!</strong><br><a href='entri.php'>Coba Lagi</a></div>";
+exit;
+}
+
+if(!get_magic_quotes_gpc())
+{
+    $fileName = addslashes($fileName);
+    $filePath = addslashes($filePath);
+}
+
+$title = $_POST['title'];
+$description = $_POST['description'];
+
+$query = "INSERT INTO $user_pictures (gambar_jual, title, description) VALUES ('$filePath', '$title', '$description')";
+
+
+
+
+sqlsrv_query($conn_p,"INSERT INTO box_jualbeli (gambar_jual,judul_barang,ketrgn_gmbr,harga) VALUES
+  ('$fileName','$_POST[judul_barang]','$_POST[ketrgn_gmbr]','$_POST[harga]')");
+
+          echo '
+         <center><div style="color:#333;font-weight:bold;margin-top:22px;"> Wait for a your request, proses upload....<br>
+         <img src="loading.gif">
+       </center></div><meta http-equiv="refresh" content="3;URL=entri.php?succes=confirmation">';  
+
+  echo "</div>";
+      
+
+
+
+ 
+}
+
+
+?>
